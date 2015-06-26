@@ -34,8 +34,10 @@ class NewVisitorTest(unittest.TestCase):
 		#Hit the enter
 		inputbox.send_keys(Keys.ENTER)
 
-		table = self.browser.find_element_by_id('movie_list_table')
-		rows = table.find_elements_by_tag_name('tr')
+		inputbox = self.browser.find_element_by_id('id_movie_name')
+		inputbox.send_keys('The Matrix')
+		inputbox.send_keys(Keys.ENTER)
+
 		self.check_for_row_in_movie_list_table('1. Watchmen')
 		self.check_for_row_in_movie_list_table('2. The Matrix')
 

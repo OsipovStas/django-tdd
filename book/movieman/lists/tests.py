@@ -16,6 +16,10 @@ class HomePageTest(TestCase):
 		response = home_page(request)
 		self.assertIn("Your Watch list", response.content.decode())
 
+	def test_that_home_page_only_saves_movies_when_necessary(self):
+		request = HttpRequest()
+		home_page(request)
+		self.assertEqual(Item.objects.count(), 0)
 
 	def test_that_home_page_can_save_POST_request(self):
 		request = HttpRequest()
@@ -24,11 +28,28 @@ class HomePageTest(TestCase):
 
 		response = home_page(request)
 
-		expected = render_to_string(
-			'home.html',
-			{'new_movie_name': "A new movie title"})
-		self.assertEqual(response.content.decode(), expected)
+		self.assertEqual(Item.objects.count(), 1)
+		new_movie = Item.objects.first()
+		self.assertEqual(new_movie.text, "A new movie title")
 
+	def test_that_home_page_redirects_after_POST(self):
+		request = HttpRequest()
+		request.method = 'POST'
+		request.POST['movie_name'] = "A new movie title"
+
+		response = home_page(request)
+
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response['location'], '/')
+
+	def test_that_home_page_displays_all_movies(self):
+   		Item.objects.create(text = "Movie 1")
+   		Item.objects.create(text = "Movie 2")
+
+   		request = HttpRequest()
+   		response = home_page(request)
+   		self.assertIn("Movie 1", response.content.decode())
+   		self.assertIn("Movie 2", response.content.decode())
 
 from lists.models import Item
 
