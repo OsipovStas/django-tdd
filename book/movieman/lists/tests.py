@@ -30,6 +30,29 @@ class HomePageTest(TestCase):
 		self.assertEqual(response.content.decode(), expected)
 
 
+from lists.models import Item
+
+class ItemModelTest(TestCase):
+
+	def test_that_saving_and_retrieving_items_working(self):
+		first = Item()
+		first.text = 'The first ever item'
+		first.save()
+
+		second = Item()
+		second.text = "Second item"
+		second.save()
+
+		saved = Item.objects.all()
+		self.assertEqual(saved.count(), 2)
+
+		first_saved = saved[0]
+		second_saved = saved[1]
+		self.assertEqual(first_saved.text, 'The first ever item')
+		self.assertEqual(second_saved.text, "Second item")
+
+
+
 
 		
 
