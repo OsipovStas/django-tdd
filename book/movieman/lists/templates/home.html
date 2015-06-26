@@ -5,8 +5,16 @@
 
 	<body>
 		<h1>Your Watch list</h1>
-		<input id="id_new_item" placeholder="Enter a movie name">
-		<table id="movie_list_table"></table>
+		<form method="POST">
+			<input name="movie_name" id="id_movie_name" placeholder="Enter a movie name">
+			{% csrf_token %}
+		</form>
+		
+		<table id="movie_list_table">
+			<tr>
+				<td>1. {{ new_movie_name }}</td>
+			</tr>	
+		</table>
 	</body>
 	
 

@@ -19,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
 		self.assertIn('Your Watch list', header_text)
 
 		#Now it's possible to enter movie to see
-		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox = self.browser.find_element_by_id('id_movie_name')
 		self.assertEqual(inputbox.get_attribute('placeholder'), "Enter a movie name")
 		
 		#User types Watchmen into text box
@@ -29,11 +29,8 @@ class NewVisitorTest(unittest.TestCase):
 
 		table = self.browser.find_element_by_id('movie_list_table')
 		rows = table.find_elements_by_tag_name('tr')
-		self.assertTrue(
-			any(row.text == '1: Watchmen' for row in rows),
-			"New must-see movie did not appear in table")
-
-
+		self.assertIn('1. Watchmen', [row.text for row in rows])
+		self.assertIn('2. The Matrix', [row.text for row in rows])
 
 		self.fail('Fail!')
 

@@ -14,8 +14,22 @@ class HomePageTest(TestCase):
 	def test_that_home_page_returns_correct_html(self):
 		request = HttpRequest()
 		response = home_page(request)
-		expected = render_to_string('home.html')
+		self.assertIn("Your Watch list", response.content.decode())
+
+
+	def test_that_home_page_can_save_POST_request(self):
+		request = HttpRequest()
+		request.method = 'POST'
+		request.POST['movie_name'] = "A new movie title"
+
+		response = home_page(request)
+
+		expected = render_to_string(
+			'home.html',
+			{'new_movie_name': "A new movie title"})
 		self.assertEqual(response.content.decode(), expected)
+
+
 
 		
 
